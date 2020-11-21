@@ -34,6 +34,7 @@ function getDecksFromDb(callback) {
 //getDeck function for one deck
 exports.getDeckById =  function(req, res) {
     const id = req.query.id;
+    console.log(`Id of deck: ${id}`);
 
     getDeckFromDb(id, (err, result) => {
         if (err) {
@@ -47,7 +48,7 @@ exports.getDeckById =  function(req, res) {
 
 function getDeckFromDb(id, callback) {
     console.log("Getting deck from db.");
-    const sql = `SELECT * FROM flash_deck WHERE deck_id = ${id}`;
+    const sql = "SELECT * FROM flash_deck WHERE deck_id = $1::int";
     const params = [id];
     pool.query(sql, params, (err, res) => {
         if (err) {
