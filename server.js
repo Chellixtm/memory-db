@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = cors();
+const cors = require('cors');
 const { getDecksByUser, getDeckById } = require('./query');
 
 
