@@ -7,7 +7,7 @@ exports.getTest =  function(req, res) {
         if (err) {
             res.status(500).json({success: false, data: err});
         } else {
-            const decks = result[0];
+            const decks = result;
             res.status(200).json(decks);
         }
     });
