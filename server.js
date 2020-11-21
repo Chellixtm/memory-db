@@ -1,8 +1,13 @@
 const express = require('express');
-const app = express();
+const cors = cors();
 const { getDecksByUser, getDeckById } = require('./query');
 
+
+const app = express();
+
 app.set("port", (process.env.PORT || 5000));
+
+app.use(cors());
 
 app.get("/deck/getUserDecks", getDecksByUser);
 
