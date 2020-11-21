@@ -3,34 +3,6 @@ const connString = process.env.DATABASE_URL || "postgres://qawpzrjqnhtiaf:a23bf8
 const pool = new Pool({connectionString: connString});
 
 
-// Just a test function to make sure that my database is returning data
-exports.getTest =  function(req, res) {
-    getDecksFromDb((err, result) => {
-        if (err) {
-            res.status(500).json({success: false, data: err});
-        } else {
-            const decks = result;
-            res.status(200).json(decks);
-        }
-    });
-};
-
-function getDecksFromDb(callback) {
-    console.log("Getting decks from db.");
-    const sql = "SELECT * FROM flash_deck";
-    pool.query(sql, (err, res) => {
-        if (err) {
-            console.log("Error in query: ");
-            console.log(err);
-            callback(err, null);
-        }
-
-        console.log("Found decks.");
-
-        callback(null, res.rows);
-    });
-}
-
 //getDeck function for one deck
 exports.getDeckById =  function(req, res) {
     const id = req.query.id;
@@ -49,6 +21,37 @@ exports.getDeckById =  function(req, res) {
 function getDeckFromDb(id, callback) {
     console.log("Getting deck from db.");
     const sql = "SELECT * FROM flash_deck WHERE deck_id = $1::int";
+    const params = [id];
+    pool.query(sql, params, (err, res) => {
+        if (err) {
+            console.log("Error in query: ");
+            console.log(err);
+            callback(err, null);
+        }
+
+        console.log("Found deck.");
+
+        callback(null, res.rows);
+    });
+}
+
+// get decks by user
+exports.getDecksByUser =  function(req, res) {
+    const id = req.query.id;
+
+    getUserDecksFromDb(id, (err, result) => {
+        if (err) {
+            res.status(500).json({success: false, data: err});
+        } else {
+            const decks = result;
+            res.status(200).json(decks);
+        }
+    });
+};
+
+function getUserDecksFromDb(id, callback) {
+    console.log("Getting deck from db.");
+    const sql = "SELECT * FROM flash_deck WHERE creator_id = $1::int";
     const params = [id];
     pool.query(sql, params, (err, res) => {
         if (err) {
