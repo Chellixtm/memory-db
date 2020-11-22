@@ -1,7 +1,5 @@
-const { Pool } = require('pg');
-const connString = process.env.DATABASE_URL;
-const pool = new Pool({connectionString: connString});
-
+const dbCon = require('./dbConnection');
+const pool = dbCon.dbConnect(); 
 
 //getDeck function for one deck
 exports.getDeckById =  function(req, res) {

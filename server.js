@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { getDecksByUser, getDeckById } = require('./query');
+const { getDecksByUser, getDeckById } = require('./db/deckQuery');
 
 
 const app = express();
