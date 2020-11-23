@@ -92,6 +92,37 @@ function createNewDeck(deck_name, creator_id, callback) {
 
         console.log("New deck created.");
 
-        callback(null);
+        callback(null, res);
+    })
+}
+
+// update deck
+exports.putDeck = (req, res) => {
+    const id = req.params.id;
+    const deck_name = req.body.deck_name;
+
+    updateDeck(id, deck_name, (err, result) => {
+        if (err) {
+            res.status(500).json({success: false, data: err});
+        } else {
+            res.status(200).json(result);
+        }
+    })
+}
+
+function updateDeck(id, deck_name, callback) {
+    console.log("Updating deck.");
+    const sql = "UPDATE flash_deck SET deck_name = $2::text WHERE deck_id = $1::int";
+    const params = [id, deck_name];
+    pool.query(sql, params, (err, res) => {
+        if (err) {
+            console.log("Error in query: ");
+            console.log(err);
+            callback(err, null);
+        }
+
+        console.log("Deck updated.");
+
+        callback(null, res);
     })
 }
