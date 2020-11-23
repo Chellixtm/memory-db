@@ -2,7 +2,7 @@ const dbCon = require('./dbConnection');
 const pool = dbCon.dbConnect(); 
 
 //getDeck function for one deck
-exports.getDeckById =  function(req, res) {
+exports.getDeckById =  (req, res) => {
     const id = req.query.id;
     console.log(`Id of deck: ${id}`);
 
@@ -34,7 +34,7 @@ function getDeckFromDb(id, callback) {
 }
 
 // get decks by user
-exports.getDecksByUser =  function(req, res) {
+exports.getDecksByUser =  (req, res) => {
     const id = req.query.id;
 
     getUserDecksFromDb(id, (err, result) => {
@@ -48,7 +48,7 @@ exports.getDecksByUser =  function(req, res) {
 };
 
 function getUserDecksFromDb(id, callback) {
-    console.log("Getting deck from db.");
+    console.log("Getting deck from db...");
     const sql = "SELECT * FROM flash_deck WHERE creator_id = $1::int";
     const params = [id];
     pool.query(sql, params, (err, res) => {
@@ -62,4 +62,35 @@ function getUserDecksFromDb(id, callback) {
 
         callback(null, res.rows);
     });
+}
+
+// post new deck by user
+exports.postDeck = (req, res) => {
+    const deck_name = req.body.deck_name;
+    const creator_id = req.body.creator_id;
+
+    createNewDeck(deck_name, creator_id, (err, result) => {
+        if (err) {
+            res.status(500).json({success: false, data: err});
+        } else {
+            res.status(200).json(result);
+        }
+    })
+}
+
+function createNewDeck(deck_name, creator_id, callback) {
+    console.log("Creating new deck...")
+    const sql = "INSERT INTO flash_deck VALUES (default, $1::string, $2::int)";
+    const params = [deck_name, creator_id];
+    pool.query(sql, params, (err, res) => {
+        if (err) {
+            console.log("Error in query: ");
+            console.log(err);
+            callback(err, null);
+        }
+
+        console.log("New deck created.");
+
+        callback(null, res.rows);
+    })
 }
