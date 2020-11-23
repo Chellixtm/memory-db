@@ -92,6 +92,6 @@ function createNewDeck(deck_name, creator_id, callback) {
 
         console.log("New deck created.");
 
-        callback(null, res.rows);
+        callback(null);
     })
 }
