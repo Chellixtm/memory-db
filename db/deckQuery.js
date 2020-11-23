@@ -81,7 +81,7 @@ exports.postDeck = (req, res) => {
 
 function createNewDeck(deck_name, creator_id, callback) {
     console.log("Creating new deck...")
-    const sql = "INSERT INTO flash_deck VALUES (default, $1::string, $2::int)";
+    const sql = "INSERT INTO flash_deck VALUES (default, $1::text, $2::int)";
     const params = [deck_name, creator_id];
     pool.query(sql, params, (err, res) => {
         if (err) {
