@@ -66,7 +66,7 @@ function getUserDecksFromDb(id, callback) {
 
 // post new deck by user
 exports.postDeck = (req, res) => {
-    console.log(req.body);
+    console.log(req);
     const deck_name = req.body.deck_name;
     const creator_id = req.body.creator_id;
 
