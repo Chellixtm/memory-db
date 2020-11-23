@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const { getDecksByUser, getDeckById, postDeck } = require('./db/deckQuery');
 
 
@@ -16,7 +17,7 @@ app.get("/deck/getUserDecks", getDecksByUser);
 
 app.get("/deck/getId", getDeckById);
 
-app.post("/deck/new", postDeck);
+app.post("/deck/new", bodyParser.json(), postDeck);
 
 // app.put("/deck/update");
 
