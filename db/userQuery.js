@@ -45,10 +45,11 @@ function createNewUser(userInfo, callback) {
 exports.loginUser = (req, res) => {
     let userDatabase;
     getUserByName(req.body.username, (err, result) => {
+        console.log(result);
         if (err) {
             console.log("Error: " + err);
         } else if (!result) {
-            return res.status(401).json({
+            res.status(401).json({
                 message: "User Doesn't Exist"
             });
         } else {
