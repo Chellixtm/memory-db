@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const session = require('express-session');
 const { getDecksByUser, getDeckById, postDeck, putDeck } = require('./db/deckQuery');
 
 
