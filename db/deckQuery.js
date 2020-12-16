@@ -4,7 +4,6 @@ const pool = dbCon.dbConnect();
 //getDeck function for one deck
 exports.getDeckById =  (req, res) => {
     const id = req.query.id;
-    console.log(`Id of deck: ${id}`);
 
     getDeckFromDb(id, (err, result) => {
         if (err) {
@@ -66,7 +65,6 @@ function getUserDecksFromDb(id, callback) {
 
 // post new deck by user
 exports.postDeck = (req, res) => {
-    console.log(req);
     const deck_name = req.body.deck_name;
     const creator_id = req.body.creator_id;
 
@@ -92,8 +90,8 @@ function createNewDeck(deck_name, creator_id, callback) {
 
         console.log("New deck created.");
 
-        callback(null, res);
-    })
+        callback(null, res.rowCount);
+    });
 }
 
 // update deck
@@ -107,7 +105,7 @@ exports.putDeck = (req, res) => {
         } else {
             res.status(200).json(result);
         }
-    })
+    });
 }
 
 function updateDeck(id, deck_name, callback) {
@@ -124,5 +122,35 @@ function updateDeck(id, deck_name, callback) {
         console.log("Deck updated.");
 
         callback(null, res);
-    })
+    });
+}
+
+// Delete deck
+exports.deleteDeck = (req, res) => {
+    const id = req.query.id;
+
+    deleteDeckFromDb(id, (err, result) => {
+        if (err) {
+            res.status(500).json({success: false, data: err});
+        } else {
+            res.status(200).json(result);
+        }
+    });
+}
+
+function deleteDeckFromDb(id, callback) {
+    console.log("Deleting deck.");
+    const sql = "DELETE FROM flash_deck WHERE deck_id = $1::int";
+    const params = [id];
+    pool.query(sql, params, (err, res) => {
+        if (err) {
+            console.log("Error in query: ");
+            console.log(err);
+            callback(err, null);
+        }
+
+        console.log("Deck updated.");
+
+        callback(null, res);
+    });
 }
