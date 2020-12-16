@@ -1,29 +1,32 @@
 const bcrypt = require('bcrypt');
 const dbCon = require('./dbConnection');
-const pool = dbCon.dbConnect(); 
+const pool = dbCon.dbConnect();
 
 exports.signupUser = (req, res) => {
     console.log("Request Body: " + req.body);
     let userInfo;
     bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-        userInfo = [
-            req.body.username,
-            req.body.email,
-            hash
-        ];
-    });
+        .then(hash => {
+            userInfo = [
+                req.body.username,
+                req.body.email,
+                hash
+            ];
 
-    console.log("User Info: " + userInfo);
-    
+            console.log("User Info: " + userInfo);
 
-    createNewUser(userInfo, (err, result) => {
-        if (err) {
-            res.status(500).json({success: false, data: err});
-        } else {
-            res.status(200).json(result);
-        }
-    })
+
+            createNewUser(userInfo, (err, result) => {
+                if (err) {
+                    res.status(500).json({
+                        success: false,
+                        data: err
+                    });
+                } else {
+                    res.status(200).json(result);
+                }
+            });
+        });
 }
 
 function createNewUser(uuserInfo, callback) {
