@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 exports.checkAuth = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(" ")[1];
-        jwt.verify(token, 'secret_testing_auth_for_jwt_for_project_2');
+        jwt.verify(token, process.env.JWT_SECRET);
         next();
     } catch (error) {
         res.status(401).json({ message: "Auth Failed!", data: error});

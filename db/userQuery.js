@@ -61,7 +61,7 @@ exports.loginUser = (req, res) => {
                             username: userDatabase.username,
                             email: userDatabase.email
                         },
-                        'secret_testing_auth_for_jwt_for_project_2',
+                        process.env.JWT_SECRET,
                         { expiresIn: "1h"}
                         );
                     res.status(200).json({
