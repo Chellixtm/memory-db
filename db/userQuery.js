@@ -53,7 +53,7 @@ exports.loginUser = (req, res) => {
                 message: "User Doesn't Exist"
             });
         } else {
-            userDatabase = result;
+            userDatabase = result[0];
             console.log(userDatabase);
             bcrypt.compare(req.body.password, userDatabase.password, (err, result) => {
                 if (result) {
