@@ -45,15 +45,16 @@ function createNewUser(userInfo, callback) {
 exports.loginUser = (req, res) => {
     let userDatabase;
     getUserByName(req.body.username, (err, result) => {
-        console.log(result);
         if (err) {
             console.log("Error: " + err);
         } else if (!result) {
+            console.log("Result empty.");
             res.status(401).json({
                 message: "User Doesn't Exist"
             });
         } else {
             userDatabase = result;
+            console.log(userDatabase);
             bcrypt.compare(req.body.password, userDatabase.password, (err, result) => {
                 if (result) {
                     const token = jwt.sign({
