@@ -14,7 +14,7 @@ app.use(cors());
 /* User Commands ----------------------------------------------------------- */
 app.post("/user/signup", signupUser);
 
-app.post("/user/login", loginUser);
+// app.post("/user/login", loginUser);
 
 /* Deck Commands ----------------------------------------------------------- */
 app.get("/deck/getUserDecks", getDecksByUser);
