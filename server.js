@@ -12,7 +12,7 @@ app.set("port", (process.env.PORT || 5000));
 app.use(cors());
 
 /* User Commands ----------------------------------------------------------- */
-app.post("/user/signup", signupUser);
+app.post("/user/signup", bodyParser.json(), signupUser);
 
 // app.post("/user/login", loginUser);
 
@@ -23,7 +23,7 @@ app.get("/deck/getId", getDeckById);
 
 app.post("/deck/new", bodyParser.json(), postDeck);
 
-app.put("/deck/update", bodyParser.json, putDeck);
+app.put("/deck/update", bodyParser.json(), putDeck);
 
 // app.delete("/deck/delete");
 
