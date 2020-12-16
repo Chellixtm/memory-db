@@ -3,6 +3,7 @@ const dbCon = require('./dbConnection');
 const pool = dbCon.dbConnect(); 
 
 exports.signupUser = (req, res) => {
+    console.log(req.body);
     let userInfo;
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
