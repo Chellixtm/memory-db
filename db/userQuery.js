@@ -29,7 +29,7 @@ exports.signupUser = (req, res) => {
         });
 }
 
-function createNewUser(uuserInfo, callback) {
+function createNewUser(userInfo, callback) {
     console.log("Creating new User...");
     const sql = "INSERT INTO users VALUES (default, $1::text, $2::text, $3::text)";
     pool.query(sql, userInfo, (err, res) => {
