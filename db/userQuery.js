@@ -54,7 +54,6 @@ exports.loginUser = (req, res) => {
             });
         } else {
             userDatabase = result[0];
-            console.log(userDatabase);
             bcrypt.compare(req.body.password, userDatabase.password, (err, result) => {
                 if (result) {
                     const token = jwt.sign({
@@ -90,7 +89,6 @@ function getUserByName(username, callback) {
             callback(err, null);
         }
 
-        console.log("Query successful");
         callback(null, res.rows);
     });
 }
