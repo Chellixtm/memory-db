@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { getDecksByUser, getDeckById, postDeck, putDeck } = require('./db/deckQuery');
-const { signupUser } = require('./db/userQuery');
+const { signupUser, loginUser } = require('./db/userQuery');
 
 
 const app = express();
@@ -14,7 +14,7 @@ app.use(cors());
 /* User Commands ----------------------------------------------------------- */
 app.post("/user/signup", bodyParser.json(), signupUser);
 
-// app.post("/user/login", loginUser);
+app.post("/user/login", bodyParser.json(), loginUser);
 
 /* Deck Commands ----------------------------------------------------------- */
 app.get("/deck/getUserDecks", getDecksByUser);

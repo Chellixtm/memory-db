@@ -1,9 +1,9 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const dbCon = require('./dbConnection');
 const pool = dbCon.dbConnect();
 
 exports.signupUser = (req, res) => {
-    console.log("Request Body: " + req.body);
     let userInfo;
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
@@ -12,9 +12,6 @@ exports.signupUser = (req, res) => {
                 req.body.email,
                 hash
             ];
-
-            console.log("User Info: " + userInfo);
-
 
             createNewUser(userInfo, (err, result) => {
                 if (err) {
@@ -42,5 +39,57 @@ function createNewUser(userInfo, callback) {
         console.log("New User created.");
 
         callback(null, res.rowCount);
+    });
+}
+
+exports.loginUser = (req, res) => {
+    let userInfo;
+    let userDatabase;
+
+    getUserByName(req.body.username, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else if (!result) {
+            return res.status(401).json({
+                message: "User Doesn't Exist"
+            });
+        } else {
+            userDatabase = result;
+            bcrypt.compare(req.body.password, userDatabase.password, (err, result) => {
+                if (result) {
+                    const token = jwt.sign({
+                            user_id: userDatabase.user_id,
+                            username: userDatabase.username,
+                            email: userDatabase.email
+                        },
+                        'secret_testing_auth_for_jwt_for_project_2',
+                        { expiresIn: "1h"}
+                        );
+                    res.status(200).json({
+                        token: token
+                    });
+                } else {
+                    res.status(401).json({
+                        message: err
+                    });
+                }
+            });
+        }
+    });
+
+
+}
+
+function getUserByName(username, callback) {
+    console.log("Getting user " + username);
+    const sql = "SELECT * FROM users WHERE username = $1::text";
+    pool.query(sql, [username], (err, res) => {
+        if (err) {
+            console.log("Error in query: ");
+            console.log(err);
+            callback(err, null);
+        }
+
+        callback(null, res.rows);
     });
 }
